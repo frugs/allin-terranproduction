@@ -62,7 +62,7 @@
            colour = isUsage ? "#39A2AE" : "#498467"
 
            return {
-             label: isUsage ? "Production Used" : "Production Capacity",
+             label: isUsage ? "Production Utilised" : "Production Capacity Available",
              data: data,
              steppedLine: 'before',
              fill: false,
@@ -107,7 +107,7 @@
             legend: {
               display: true,
               labels: {
-                filter: (legendItem) => legendItem.datasetIndex <= 1
+                filter: (legendItem) => legendItem.datasetIndex > 0 && legendItem.datasetIndex < 3
               }
             },
             tooltip: {
