@@ -36,6 +36,15 @@ div.secondary-element {
     font-size: 1.5em;
 }
 
+form {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80vw;
+    padding: 2em;
+}
+
 .value-element {
     font-weight: bold;
 }

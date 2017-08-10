@@ -33,41 +33,42 @@ class ReplayUploader:
         else:
             replay_data = request.content
 
-        if replay_data is not None:
+        if replay_data is None:
+            return Response(body="Invalid Replay", status=402)
 
-            with tempfile.TemporaryFile() as replay_file:
-                while True:
-                    chunk = await request.content.read(CHUNK_SIZE)
-                    if not chunk:
-                        break
+        with tempfile.TemporaryFile() as replay_file:
+            while True:
+                chunk = await request.content.read(CHUNK_SIZE)
+                if not chunk:
+                    break
 
-                    replay_file.write(chunk)
+                replay_file.write(chunk)
 
-                replay_file.seek(0)
+            replay_file.seek(0)
 
-                try:
-                    replay = sc2reader.load_replay(replay_file)
+            try:
+                replay = sc2reader.load_replay(replay_file)
 
-                    data = {
-                        "players": []
-                    }
-                    for player in replay.players:
-                        production_capacity = techlabreactor.production_capacity_till_time_for_player(
-                            420, player, replay)
-                        production_usage = techlabreactor.production_used_till_time_for_player(
-                            420, player, replay)
-                        supply_blocks = techlabreactor.get_supply_blocks_till_time_for_player(
-                            420, player, replay)
+                data = {
+                    "players": []
+                }
+                for player in replay.players:
+                    production_capacity = techlabreactor.production_capacity_till_time_for_player(
+                        420, player, replay)
+                    production_usage = techlabreactor.production_used_till_time_for_player(
+                        420, player, replay)
+                    supply_blocks = techlabreactor.get_supply_blocks_till_time_for_player(
+                        420, player, replay)
 
-                        if production_capacity and production_usage:
-                            data["players"].append({
-                                "name": player.name,
-                                "structureTypes": list(production_capacity.keys()),
-                                "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks)
-                            })
+                    if production_capacity and production_usage:
+                        data["players"].append({
+                            "name": player.name,
+                            "structureTypes": list(production_capacity.keys()),
+                            "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks)
+                        })
 
-                except Exception as e:
-                    return Response(body="Invalid Replay\n" + str(e), status=402)
+            except Exception as e:
+                return Response(body="Invalid Replay\n" + str(e), status=402)
 
-            param = _compress_and_encode(json.dumps(data))
-            return HTTPFound(self.redirect_supplier(param))
+        param = _compress_and_encode(json.dumps(data))
+        return HTTPFound(self.redirect_supplier(param))
