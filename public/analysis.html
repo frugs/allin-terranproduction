@@ -21,19 +21,21 @@
     Production Efficiency Visualiser
   </h1>
 
-  <div class="primary-element">
+  <div id="replay-name" class="secondary-element"></div>
+
+  <div class="primary-element hidden">
     <span id="player-name-0"></span>
   </div>
 
-  <div class="chart-container">
+  <div class="chart-container hidden">
     <canvas id="chart-0" width="1000" height="500"></canvas>
   </div>
 
-  <div class="primary-element">
+  <div class="primary-element hidden">
     <span id="player-name-1"></span>
   </div>
 
-  <div class="chart-container">
+  <div class="chart-container hidden">
     <canvas id="chart-1" width="1000" height="600"></canvas>
   </div>
 
@@ -49,11 +51,17 @@
 
     rawInputData = JSON.parse(jsonData)
 
+    document.getElementById("replay-name").innerHTML = rawInputData.replayName
+
     for (var i = 0, len = Math.min(rawInputData.players.length, 2); i < len; i++) {
       player = rawInputData.players[i]
 
       var playerElementId = "player-name-" + i
-      document.getElementById(playerElementId).innerHTML = player.name
+      var playerElement = document.getElementById(playerElementId)
+
+      playerElement.parentElement.classList.remove("hidden")
+
+      playerElement.innerHTML = player.name
 
       chartData = {
          datasets: player.chartData.map((data, index) => {
@@ -79,7 +87,11 @@
       <!--chartData.datasets.splice(-1, 1)-->
 
       var chartElementId = "chart-" + i
-      var ctx = document.getElementById(chartElementId).getContext('2d');
+      var chartElement = document.getElementById(chartElementId)
+
+      chartElement.parentElement.classList.remove("hidden")
+
+      var ctx = chartElement.getContext('2d');
       var myChart = new Chart(ctx, {
           type: 'line',
           data: chartData,

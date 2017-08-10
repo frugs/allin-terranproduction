@@ -33,7 +33,8 @@ div.secondary-element {
     margin-right: auto;
     width: 80vw;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1em;
+    padding-bottom: 2em;
 }
 
 form {
@@ -54,6 +55,11 @@ form {
     width: 70vw;
     margin-left: auto;
     margin-right: auto;
+}
+
+.hidden {
+    display: none;
+    height: 0px;
 }
 
 }

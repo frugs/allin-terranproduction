@@ -30,7 +30,9 @@ class ReplayUploader:
         if request.content_type.startswith("multipart/"):
             reader = await request.multipart()
             replay_data = await reader.next()
+            replay_name = replay_data.filename
         else:
+            replay_name = ""
             replay_data = request.content
 
         if replay_data is None:
@@ -50,7 +52,8 @@ class ReplayUploader:
                 replay = sc2reader.load_replay(replay_file)
 
                 data = {
-                    "players": []
+                    "players": [],
+                    "replayName": replay_name
                 }
                 for player in replay.players:
                     production_capacity = techlabreactor.production_capacity_till_time_for_player(
@@ -64,7 +67,7 @@ class ReplayUploader:
                         data["players"].append({
                             "name": player.name,
                             "structureTypes": list(production_capacity.keys()),
-                            "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks)
+                            "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks),
                         })
 
             except Exception as e:
