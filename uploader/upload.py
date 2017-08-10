@@ -54,11 +54,11 @@ class ReplayUploader:
                 }
                 for player in replay.players:
                     production_capacity = techlabreactor.production_capacity_till_time_for_player(
-                        420, player, replay)
+                        600, player, replay)
                     production_usage = techlabreactor.production_used_till_time_for_player(
-                        420, player, replay)
+                        600, player, replay)
                     supply_blocks = techlabreactor.get_supply_blocks_till_time_for_player(
-                        420, player, replay)
+                        600, player, replay)
 
                     if production_capacity and production_usage:
                         data["players"].append({
