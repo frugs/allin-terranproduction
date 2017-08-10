@@ -112,7 +112,7 @@
               display: true,
               onClick: (e) => {},
               labels: {
-                filter: (legendItem) => legendItem.datasetIndex > 0 && legendItem.datasetIndex < 3
+                filter: (legendItem) => (legendItem.datasetIndex > 0 && legendItem.datasetIndex < 3) || legendItem.datasetIndex == chartData.datasets.length - 1
               }
             },
             tooltip: {
