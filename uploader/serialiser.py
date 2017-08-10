@@ -15,11 +15,11 @@ def serialise_chart_data(
             capacity_data.append([int(second * 1000), capacity + offset])
 
         usage_base_line = [capacity_data[0]]
-        for second, usage in production_usage[structure_type]:
+        for second, usage in production_usage.get(structure_type, []):
             usage_base_line.append([int(second * 1000), offset])
 
         usage_data = [capacity_data[0]]
-        for second, usage in production_usage[structure_type]:
+        for second, usage in production_usage.get(structure_type, []):
             usage_data.append([int(second * 1000), usage + offset])
 
         chart_data.append(usage_base_line)
