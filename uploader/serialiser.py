@@ -9,22 +9,20 @@ def serialise_chart_data(
     offset = 0
     for structure_type in production_capacity.keys():
 
-        usage_data = []
-        for second, usage in production_usage[structure_type]:
-            usage_data.append({
-                "x": int(second * 1000),
-                "y": usage + offset
-            })
-
-        chart_data.append(usage_data)
-
         capacity_data = []
         for second, capacity in production_capacity[structure_type]:
-            capacity_data.append({
-                "x": int(second * 1000),
-                "y": capacity + offset
-            })
+            capacity_data.append([int(second * 1000), capacity + offset])
 
+        usage_base_line = [capacity_data[0]]
+        for second, usage in production_usage[structure_type]:
+            usage_base_line.append([int(second * 1000), offset])
+
+        usage_data = [capacity_data[0]]
+        for second, usage in production_usage[structure_type]:
+            usage_data.append([int(second * 1000), usage + offset])
+
+        chart_data.append(usage_base_line)
+        chart_data.append(usage_data)
         chart_data.append(capacity_data)
 
         offset += 2 + max(map(lambda x: x[1], production_capacity[structure_type]))

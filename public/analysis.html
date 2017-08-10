@@ -58,18 +58,19 @@
       chartData = {
          datasets: player.chartData.map((data, index) => {
 
-           isUsage = index % 2 == 0
-           colour = isUsage ? "#39A2AE" : "#498467"
+           isCapacity = index % 3 == 2
+           isUsage = index % 3 == 1
+           colour = isCapacity ? "#498467" : "#39A2AE"
 
            return {
-             label: isUsage ? "Production Utilised" : "Production Capacity Available",
-             data: data,
+             label: isCapacity ? "Production Capacity Available" : "Production Utilised",
+             data: data.map((dataPoint) => { return {x: dataPoint[0], y: dataPoint[1]} }),
              steppedLine: 'before',
-             fill: false,
+             fill: isUsage ? "-1" : false,
              backgroundColor: colour,
              pointRadius: 0,
              borderColor: colour,
-             borderWidth: isUsage ? 3 : 2
+             borderWidth: isCapacity ? 2 : 3
            }
          })
       }
@@ -98,7 +99,7 @@
                     display: false,
                     ticks: {
                       suggestedMin: -2,
-                      suggestedMax: Math.max(... player.chartData[player.chartData.length - 1].map((data) => data.y)) + 0.5,
+                      suggestedMax: Math.max(... player.chartData[player.chartData.length - 1].map((data) => data[1])) + 0.5,
                       stepSize: 1,
                       beginAtZero: false,
                     }
@@ -106,6 +107,7 @@
             },
             legend: {
               display: true,
+              onClick: (e) => {},
               labels: {
                 filter: (legendItem) => legendItem.datasetIndex > 0 && legendItem.datasetIndex < 3
               }
@@ -125,7 +127,7 @@
                   type: 'line',
 			      mode: 'horizontal',
 			      scaleID: 'y-axis-0',
-       			  value: Math.min(... player.chartData[index * 2].map((data) => data.y)) - 0.75,
+       			  value: Math.min(... player.chartData[index * 3].map((data) => data[1])) - 0.75,
 			      borderColor: 'rgba(0,0,0,0)',
 			      borderWidth: 0,
 			      label: {
