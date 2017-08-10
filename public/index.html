@@ -5,22 +5,36 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="style.css">
 
-  <title>Blah</title>
-  <meta name="description" content="Queen Inject Efficiency Plotter">
+  <title>Production Efficiency</title>
+  <meta name="description" content="Production Efficiency Visualiser">
+  <meta name="description" content="Production Efficiency Visualiser">
   <meta name="author" content="frugs">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
-  <script src="https://unpkg.com/pako@1.0.5/dist/pako_inflate.min.js"></script>
+  <script src="Chart.bundle.min.js"></script>
+  <script src="chartjs-plugin-annotation.min.js"></script>
+  <script src="pako_inflate.min.js"></script>
 </head>
 
 <body>
 
+  <h1>
+    Production Efficiency
+  </h1>
+
   <div class="primary-element">
-    <span id="playerName"></span>
+    <span id="player-name-0"></span>
   </div>
 
   <div class="chart-container">
-    <canvas id="myChart" width="800" height="600"></canvas>
+    <canvas id="chart-0" width="1000" height="500"></canvas>
+  </div>
+
+  <div class="primary-element">
+    <span id="player-name-1"></span>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="chart-1" width="1000" height="600"></canvas>
   </div>
 
   <script type="text/javascript">
@@ -35,21 +49,11 @@
 
     rawInputData = JSON.parse(jsonData)
 
-    for (var i = 0, len = rawInputData.players.length; i < len; i++) {
+    for (var i = 0, len = Math.min(rawInputData.players.length, 2); i < len; i++) {
       player = rawInputData.players[i]
 
-      document.getElementById("playerName").innerHTML = player.name
-
-      colours = [
-        "#39A2AE",
-        "#498467",
-        "#9B8816",
-        "#503D3F",
-        "#C1D37F",
-        "#181F1C",
-        "#EC0B43",
-        "#EDCB96"
-      ]
+      var playerElementId = "player-name-" + i
+      document.getElementById(playerElementId).innerHTML = player.name
 
       chartData = {
          datasets: player.chartData.map((data, index) => {
@@ -58,27 +62,26 @@
            colour = isUsage ? "#39A2AE" : "#498467"
 
            return {
-             label: "",
+             label: isUsage ? "Production Used" : "Production Capacity",
              data: data,
              steppedLine: 'before',
              fill: false,
              backgroundColor: colour,
              pointRadius: 0,
              borderColor: colour,
-             borderWidth: isUsage ? 3 : 1
+             borderWidth: isUsage ? 3 : 2
            }
          })
       }
 
-      var ctx = document.getElementById("myChart").getContext('2d');
+      var chartElementId = "chart-" + i
+      var ctx = document.getElementById(chartElementId).getContext('2d');
       var myChart = new Chart(ctx, {
           type: 'line',
           data: chartData,
           options: {
             title: {
-              display: true,
-              text: "Production Efficiency",
-              fontSize: 36
+              display: false
             },
             scales: {
               xAxes: [{
@@ -94,13 +97,18 @@
                 yAxes: [{
                     display: false,
                     ticks: {
-                      suggestedMin: -1,
-                      beginAtZero: false
+                      suggestedMin: -2,
+                      suggestedMax: Math.max(... player.chartData[player.chartData.length - 1].map((data) => data.y)) + 0.5,
+                      stepSize: 1,
+                      beginAtZero: false,
                     }
                 }]
             },
             legend: {
-              display: false
+              display: true,
+              labels: {
+                filter: (legendItem) => legendItem.datasetIndex <= 1
+              }
             },
             tooltip: {
               enabled: false
@@ -110,11 +118,29 @@
             },
             animation: {
               easing: 'easeOutCubic'
+            },
+            annotation: {
+              annotations: player.structureTypes.map((structureType, index) => {
+                return {
+                  type: 'line',
+			      mode: 'horizontal',
+			      scaleID: 'y-axis-0',
+       			  value: Math.min(... player.chartData[index * 2].map((data) => data.y)) - 0.75,
+			      borderColor: 'rgba(0,0,0,0)',
+			      borderWidth: 0,
+			      label: {
+			        enabled: true,
+			        position: "left",
+			        xAdjust: 75,
+			        xPadding: 9,
+			        yPadding: 9,
+			        content: structureType.replace("Command", "Command ")
+			      }
+                }
+              })
             }
           }
       });
-
-      break
     }
 
   </script>

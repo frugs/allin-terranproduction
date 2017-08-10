@@ -59,7 +59,7 @@ class ReplayUploader:
 
                         if production_capacity and production_usage:
                             data["players"].append({
-                                "name": str(player),
+                                "name": player.name,
                                 "structureTypes": list(production_capacity.keys()),
                                 "chartData": serialise_chart_data(production_capacity, production_usage)
                             })
