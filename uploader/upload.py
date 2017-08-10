@@ -56,12 +56,14 @@ class ReplayUploader:
                             420, player, replay)
                         production_usage = techlabreactor.production_used_till_time_for_player(
                             420, player, replay)
+                        supply_blocks = techlabreactor.get_supply_blocks_till_time_for_player(
+                            420, player, replay)
 
                         if production_capacity and production_usage:
                             data["players"].append({
                                 "name": player.name,
                                 "structureTypes": list(production_capacity.keys()),
-                                "chartData": serialise_chart_data(production_capacity, production_usage)
+                                "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks)
                             })
 
                 except Exception as e:

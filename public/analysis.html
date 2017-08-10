@@ -58,15 +58,16 @@
       chartData = {
          datasets: player.chartData.map((data, index) => {
 
-           isCapacity = index % 3 == 2
-           isUsage = index % 3 == 1
-           colour = isCapacity ? "#498467" : "#39A2AE"
+           isSupplyBlock = index == player.chartData.length - 1
+           isCapacity = index % 3 == 2 && !isSupplyBlock
+           isUsage = index % 3 == 1 && !isSupplyBlock
+           colour = isCapacity ? "#498467" : (isSupplyBlock ? "rgba(224, 76, 108, 0.4)" : "#39A2AE")
 
            return {
-             label: isCapacity ? "Production Capacity Available" : "Production Utilised",
-             data: data.map((dataPoint) => { return {x: dataPoint[0], y: dataPoint[1]} }),
+             label: isCapacity ? "Production Capacity Available" : (isSupplyBlock ? "Supply Blocks": "Production Utilised"),
+             data: data.map((dataPoint) => { return {x: dataPoint[0], y: dataPoint[1] != "NaN" ? dataPoint[1] : NaN } }),
              steppedLine: 'before',
-             fill: isUsage ? "-1" : false,
+             fill: isUsage ? "-1" : (isSupplyBlock ? "origin" : false),
              backgroundColor: colour,
              pointRadius: 0,
              borderColor: colour,
@@ -74,6 +75,8 @@
            }
          })
       }
+
+      <!--chartData.datasets.splice(-1, 1)-->
 
       var chartElementId = "chart-" + i
       var ctx = document.getElementById(chartElementId).getContext('2d');
@@ -99,7 +102,7 @@
                     display: false,
                     ticks: {
                       suggestedMin: -2,
-                      suggestedMax: Math.max(... player.chartData[player.chartData.length - 1].map((data) => data[1])) + 0.5,
+                      suggestedMax: Math.max(... player.chartData[player.chartData.length - 2].map((data) => data[1])) + 0.5,
                       stepSize: 1,
                       beginAtZero: false,
                     }
