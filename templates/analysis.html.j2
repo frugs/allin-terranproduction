@@ -3,27 +3,29 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="static/styles/main.css">
 
-  <title>Production Efficiency Visualiser</title>
-  <meta name="description" content="Production Efficiency Visualiser">
-  <meta name="description" content="Production Efficiency Visualiser">
+  <title>Terran Production Efficiency Visualiser</title>
+  <meta name="description" content="Terran Production Efficiency Visualiser">
   <meta name="author" content="frugs">
 
-  <script src="Chart.bundle.min.js"></script>
-  <script src="chartjs-plugin-annotation.min.js"></script>
-  <script src="pako_inflate.min.js"></script>
+  <script src="static/scripts/Chart.bundle.min.js"></script>
+  <script src="static/scripts/chartjs-plugin-annotation.min.js"></script>
 </head>
 
 <body>
 
-  <h1>
-    Production Efficiency Visualiser
-  </h1>
+  <div class="header">
+    <img class="logo" src="static/images/allin_official.png" alt="All Inspiration">
+  </div>
 
-  <div id="replay-name" class="secondary-element"></div>
+  <h2 class="heading">
+    Terran Production Efficiency Visualiser
+  </h2>
 
-  <div class="primary-element hidden">
+  <div class="subheading"><em id="replayName"></em></div>
+
+  <div class="subsubheading hidden">
     <span id="player-name-0"></span>
   </div>
 
@@ -31,7 +33,7 @@
     <canvas id="chart-0" width="1000" height="500"></canvas>
   </div>
 
-  <div class="primary-element hidden">
+  <div class="subsubheading hidden">
     <span id="player-name-1"></span>
   </div>
 
@@ -40,18 +42,9 @@
   </div>
 
   <script type="text/javascript">
-    queryParams = window.location.search
-    nextParamIndex = queryParams.indexOf('&')
-    dataParamValue = nextParamIndex != -1 ? queryParams.substring(6, nextParamIndex) : queryParams.substring(6)
+    rawInputData = JSON.parse('{{analysis_data}}')
 
-    compressedAndEncodedJsonData = decodeURIComponent(dataParamValue)
-    compressedJsonData = atob(compressedAndEncodedJsonData)
-    decompressedJsonData = pako.inflate(compressedJsonData, {to: "string"})
-    jsonData = decodeURIComponent(escape(decompressedJsonData))
-
-    rawInputData = JSON.parse(jsonData)
-
-    document.getElementById("replay-name").innerHTML = rawInputData.replayName
+    document.getElementById("replayName").innerHTML = rawInputData.replayName
 
     for (var i = 0, len = Math.min(rawInputData.players.length, 2); i < len; i++) {
       player = rawInputData.players[i]

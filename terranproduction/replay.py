@@ -1,4 +1,8 @@
-from typing import Dict, List, Tuple
+import asyncio
+from typing import Dict, IO, List, Tuple
+
+import sc2reader
+import techlabreactor
 
 
 def serialise_chart_data(
@@ -46,3 +50,31 @@ def serialise_chart_data(
     chart_data.append(supply_block_data)
 
     return chart_data
+
+
+async def analyse_replay_file(replay_name: str, replay_file: IO[bytes]) -> dict:
+    def analyse_replay_file_inner():
+        replay = sc2reader.SC2Reader().load_replay(replay_file)
+
+        data = {
+            "replay_id": replay.filehash,
+            "players": [],
+            "replayName": replay_name
+        }
+        for player in replay.players:
+            production_capacity = techlabreactor.production_capacity_till_time_for_player(
+                600, player, replay)
+            production_usage = techlabreactor.production_used_till_time_for_player(
+                600, player, replay)
+            supply_blocks = techlabreactor.get_supply_blocks_till_time_for_player(
+                600, player, replay)
+
+            if production_capacity and production_usage:
+                data["players"].append({
+                    "name": player.name,
+                    "structureTypes": list(production_capacity.keys()),
+                    "chartData": serialise_chart_data(production_capacity, production_usage, supply_blocks),
+                })
+        return data
+
+    return await asyncio.get_event_loop().run_in_executor(None, analyse_replay_file_inner)

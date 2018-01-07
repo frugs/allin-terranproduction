@@ -1,0 +1,33 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="static/styles/main.css">
+
+  <title>Terran Production Efficiency Visualiser</title>
+  <meta name="description" content="Terran Production Efficiency Visualiser">
+  <meta name="author" content="frugs">
+</head>
+
+<body>
+
+  <div class="header">
+    <img class="logo" src="static/images/allin_official.png" alt="All Inspiration">
+  </div>
+
+  <h2 class="heading">
+    Terran Production Efficiency Visualiser
+  </h2>
+
+  <div>
+    Upload a replay to see a visualisation of the production efficiency of the Terran players.
+  </div>
+
+  <form action="upload" enctype="multipart/form-data" method="post">
+    <input id="replay" name="replay" accept=".SC2Replay" type="file">
+    <input type="submit" value="Upload">
+  </form>
+
+</body>
+</html>
