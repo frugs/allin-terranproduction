@@ -1,6 +1,5 @@
 import base64
 import gzip
-import json
 import os
 import pickle
 
@@ -24,7 +23,7 @@ async def show_analysis(request: aiohttp.web.Request) -> dict:
     replay_id = request.match_info['replay_id']
     analysis_data = await terranproduction.database.get_analysis(FIREBASE_CONFIG, replay_id)
     return {
-        "analysis_data": json.dumps(analysis_data)
+        "analysis_data": analysis_data
     }
 
 
