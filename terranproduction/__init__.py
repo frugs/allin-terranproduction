@@ -1,3 +1,4 @@
 import terranproduction.database
 import terranproduction.util
 import terranproduction.replay
+from terranproduction.app import app

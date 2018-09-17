@@ -1,0 +1,6 @@
+requests>=2.19.1
+requests-toolbelt>=0.8.0
+flask
+techlabreactor
+pyrebase
+google-cloud-datastore
