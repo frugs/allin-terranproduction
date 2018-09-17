@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 setuptools.setup(
     name="terranproduction",
@@ -14,6 +14,6 @@ setuptools.setup(
     keywords=["sc2", "replay", "sc2reader"],
     classifiers=[],
     install_requires=[
-        "techlabreactor", "requests-toolbelt>=0.8.0", "pyrebase", "flask", "google-cloud-datastore"
+        "techlabreactor", "requests>=2.19.1", "requests-toolbelt>=0.8.0", "pyrebase", "flask", "google-cloud-datastore"
     ],
 )

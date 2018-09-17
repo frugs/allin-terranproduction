@@ -42,7 +42,7 @@ form {
 
 .hidden {
     display: none;
-    height: 0px;
+    height: 0;
     font-size: 0.1em;
     color: rgba(0, 0, 0, 0);
 }
@@ -51,8 +51,7 @@ form {
 
   div.chart-container {
     position: relative;
-    width: 10vh;
-    width:80vw;
+    width: 80vw;
     margin-left: auto;
     margin-right: auto;
   }
@@ -74,9 +73,7 @@ form {
 
   div.chart-container {
     position: relative;
-    width:800px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 10vw;
   }
 
 }
