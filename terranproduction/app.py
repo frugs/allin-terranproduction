@@ -5,8 +5,10 @@ import terranproduction
 
 try:
     from google.cloud import datastore
-    FIREBASE_CONFIG = json.loads(datastore.Client().get(
-        datastore.key.Key("Config", "firebaseConfig"))["value"])
+    datastore_client = datastore.Client()
+
+    FIREBASE_CONFIG = json.loads(
+        datastore_client.get(datastore_client.key("Config", "firebaseConfig"))["value"])
 except Exception:
     with open("firebaseConfig.json") as local_config:
         FIREBASE_CONFIG = json.load(local_config)
