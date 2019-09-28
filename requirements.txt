@@ -2,6 +2,6 @@ requests>=2.19.1
 requests-toolbelt>=0.8.0
 flask
 sc2reader>=1.4.0
-techlabreactor
+techlabreactor>=0.0.34
 pyrebase
 google-cloud-datastore
